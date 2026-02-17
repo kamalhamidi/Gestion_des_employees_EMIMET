@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SALARY_MULTIPLIERS } from "@/lib/constants";
+import { toast } from "@/hooks/use-toast";
 
 interface Employee {
     id: string;
@@ -53,7 +54,11 @@ export default function NewWorkdayPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!date || selectedEmployees.size === 0) {
-            alert("Please select a date and at least one employee");
+            toast({
+                variant: "destructive",
+                title: "Validation Error",
+                description: "Please select a date and at least one employee",
+            });
             return;
         }
 
@@ -72,11 +77,19 @@ export default function NewWorkdayPage() {
             );
 
             await Promise.all(promises);
-            alert("Workdays created successfully!");
+            toast({
+                variant: "success",
+                title: "Success!",
+                description: "Workdays created successfully",
+            });
             router.push("/dashboard/workdays");
         } catch (error) {
             console.error("Failed to create workdays:", error);
-            alert("Some workdays may already exist for this date");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Some workdays may already exist for this date",
+            });
         } finally {
             setLoading(false);
         }

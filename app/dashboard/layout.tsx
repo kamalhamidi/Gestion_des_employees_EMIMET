@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header";
+import { Toaster } from "@/components/ui/toaster";
 
 export default async function DashboardLayout({
     children,
@@ -23,6 +24,7 @@ export default async function DashboardLayout({
                 </aside>
                 <main className="flex-1 overflow-y-auto p-6">{children}</main>
             </div>
+            <Toaster />
         </div>
     );
 }

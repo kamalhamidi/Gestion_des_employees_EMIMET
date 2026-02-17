@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
 
 interface Sector {
     id: string;
@@ -89,7 +90,11 @@ export default function EditEmployeePage() {
             });
         } catch (error) {
             console.error("Failed to fetch employee:", error);
-            alert("Failed to load employee data");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to load employee data",
+            });
         } finally {
             setFetching(false);
         }
@@ -134,11 +139,19 @@ export default function EditEmployeePage() {
                 router.push(`/dashboard/employees/${employeeId}`);
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to update employee");
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: data.error || "Failed to update employee",
+                });
             }
         } catch (error) {
             console.error("Failed to update employee:", error);
-            alert("An error occurred. Please try again.");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "An error occurred. Please try again.",
+            });
         } finally {
             setLoading(false);
         }

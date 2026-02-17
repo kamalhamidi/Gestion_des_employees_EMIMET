@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { DollarSign, Plus } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 interface AddAdvanceFormProps {
     employeeId: string;
@@ -35,17 +36,30 @@ export function AddAdvanceForm({ employeeId, currentTotal }: AddAdvanceFormProps
             });
 
             if (response.ok) {
+                toast({
+                    variant: "success",
+                    title: "Success!",
+                    description: "Advance payment added successfully",
+                });
                 setAmount("");
                 setNotes("");
                 setShowForm(false);
                 router.refresh();
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to add advance");
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: data.error || "Failed to add advance",
+                });
             }
         } catch (error) {
             console.error("Failed to add advance:", error);
-            alert("An error occurred. Please try again.");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "An error occurred. Please try again.",
+            });
         } finally {
             setLoading(false);
         }

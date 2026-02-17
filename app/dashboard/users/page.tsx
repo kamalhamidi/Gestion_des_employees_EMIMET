@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, Shield, User } from "lucide-react";
 import { formatShortDate } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 interface User {
     id: string;
@@ -41,11 +42,19 @@ export default function UsersPage() {
             } else {
                 const errorData = await response.json();
                 console.error("Error fetching users:", errorData);
-                alert(`Failed to fetch users: ${errorData.error || "Unknown error"}`);
+                toast({
+                    variant: "destructive",
+                    title: "Failed to fetch users",
+                    description: errorData.error || "Unknown error",
+                });
             }
         } catch (error) {
             console.error("Failed to fetch users:", error);
-            alert("Network error: Failed to connect to the server");
+            toast({
+                variant: "destructive",
+                title: "Network error",
+                description: "Failed to connect to the server",
+            });
         } finally {
             setLoading(false);
         }
@@ -67,14 +76,26 @@ export default function UsersPage() {
                 setUsers([newUser, ...users]);
                 setFormData({ email: "", password: "", name: "", role: "USER" });
                 setShowForm(false);
-                alert("User created successfully!");
+                toast({
+                    variant: "success",
+                    title: "Success!",
+                    description: "User created successfully",
+                });
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to create user");
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: data.error || "Failed to create user",
+                });
             }
         } catch (error) {
             console.error("Failed to create user:", error);
-            alert("An error occurred. Please try again.");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "An error occurred. Please try again.",
+            });
         } finally {
             setSubmitting(false);
         }

@@ -82,14 +82,34 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(employee, { status: 201 });
     } catch (error: any) {
-        if (error.code === "P2002") {
+        // Handle Zod validation errors
+        if (error.name === "ZodError") {
+            const fieldErrors = error.errors.map((err: any) => ({
+                field: err.path.join("."),
+                message: err.message,
+            }));
             return NextResponse.json(
-                { error: "CIN already exists" },
+                {
+                    error: fieldErrors[0]?.message || "Validation failed",
+                    details: fieldErrors.map((f: any) => `${f.field}: ${f.message}`).join(", "),
+                    fields: fieldErrors
+                },
                 { status: 400 }
             );
         }
+
+        // Handle unique constraint violation (duplicate CIN)
+        if (error.code === "P2002") {
+            return NextResponse.json(
+                { error: "CIN already exists. Please use a different CIN number." },
+                { status: 400 }
+            );
+        }
+
+        // Generic error
+        console.error("Employee creation error:", error);
         return NextResponse.json(
-            { error: "Failed to create employee" },
+            { error: "Failed to create employee. Please try again." },
             { status: 500 }
         );
     }

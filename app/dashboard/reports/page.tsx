@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 export default function ReportsPage() {
     const [startDate, setStartDate] = useState("");
@@ -15,7 +16,11 @@ export default function ReportsPage() {
 
     const handleExport = async () => {
         if (!startDate || !endDate) {
-            alert("Please select both start and end dates");
+            toast({
+                variant: "destructive",
+                title: "Validation Error",
+                description: "Please select both start and end dates",
+            });
             return;
         }
 
@@ -32,7 +37,11 @@ export default function ReportsPage() {
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error("Failed to export report:", error);
-            alert("Failed to generate report");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to generate report",
+            });
         } finally {
             setLoading(false);
         }

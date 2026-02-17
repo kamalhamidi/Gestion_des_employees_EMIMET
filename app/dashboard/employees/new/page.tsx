@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/hooks/use-toast";
 
 interface Sector {
     id: string;
@@ -82,11 +83,18 @@ export default function NewEmployeePage() {
                 router.push("/dashboard/employees");
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to create employee");
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: data.error || "Failed to create employee",
+                });
             }
         } catch (error) {
-            console.error("Failed to create employee:", error);
-            alert("An error occurred. Please try again.");
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "An error occurred. Please try again.",
+            });
         } finally {
             setLoading(false);
         }
