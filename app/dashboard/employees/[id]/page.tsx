@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency, formatShortDate } from "@/lib/utils";
 import Link from "next/link";
 import { Pencil, ArrowLeft } from "lucide-react";
+import { AddAdvanceForm } from "@/components/employees/advance-input";
+import { AdvanceHistory } from "@/components/employees/advance-history";
 
 interface PageProps {
     params: {
@@ -122,22 +124,16 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
                                 </p>
                             </div>
                             <div>
-                                <p className="text-sm text-muted-foreground">Advance Amount</p>
-                                <p className="font-medium">
-                                    {formatCurrency(employee.advanceAmount)}
-                                </p>
+                                <p className="text-sm text-muted-foreground">Employment Status</p>
+                                <span
+                                    className={`inline-block px-2 py-1 rounded text-sm ${employee.employmentStatus === "ACTIVE"
+                                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                        : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
+                                        }`}
+                                >
+                                    {employee.employmentStatus}
+                                </span>
                             </div>
-                        </div>
-                        <div>
-                            <p className="text-sm text-muted-foreground">Employment Status</p>
-                            <span
-                                className={`inline-block px-2 py-1 rounded text-sm ${employee.employmentStatus === "ACTIVE"
-                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                    : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
-                                    }`}
-                            >
-                                {employee.employmentStatus}
-                            </span>
                         </div>
                     </CardContent>
                 </Card>
@@ -222,6 +218,13 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
                     )}
                 </CardContent>
             </Card>
+
+            <AddAdvanceForm
+                employeeId={employee.id}
+                currentTotal={employee.advanceAmount}
+            />
+
+            <AdvanceHistory employeeId={employee.id} />
         </div>
     );
 }
