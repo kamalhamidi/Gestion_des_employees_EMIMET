@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+}
+
+model Sector {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  employees Employee[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("sectors")
+}
+
+model Function {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  employees Employee[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("functions")
+}
+
+model Employee {
+  id               String           @id @default(cuid())
+  employeeId       String           @unique
+  cin              String           @unique
+  firstName        String
+  lastName         String
+  dateOfBirth      DateTime
+  phoneNumber      String
+  address          String
+  profilePhoto     String?
+  idProofPhoto     String?
+  sectorId         String
+  sector           Sector           @relation(fields: [sectorId], references: [id])
+  functionId       String
+  function         Function         @relation(fields: [functionId], references: [id])
+  dailySalary      Float
+  advanceAmount    Float            @default(0)
+  joinDate         DateTime
+  employmentStatus EmploymentStatus @default(ACTIVE)
+  notes            String?
+  isDeleted        Boolean          @default(false)
+  workdays         Workday[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([sectorId])
+  @@index([functionId])
+  @@index([employmentStatus])
+  @@index([isDeleted])
+  @@map("employees")
+}
+
+enum EmploymentStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Workday {
+  id         String   @id @default(cuid())
+  date       DateTime
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  multiplier Float    @default(1.0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([date, employeeId])
+  @@index([date])
+  @@index([employeeId])
+  @@map("workdays")
+}
