@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { formatShortDate } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Workday {
     id: string;
@@ -19,6 +20,7 @@ interface Workday {
 }
 
 export default function WorkdaysPage() {
+    const { t } = useLanguage();
     const [workdays, setWorkdays] = useState<Workday[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -46,21 +48,21 @@ export default function WorkdaysPage() {
         return acc;
     }, {} as Record<string, Workday[]>);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div>{t.common.loading}</div>;
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Workdays</h1>
+                    <h1 className="text-3xl font-bold">{t.workdays.title}</h1>
                     <p className="text-muted-foreground">
-                        Track employee work assignments and overtime
+                        {t.workdays.subtitle}
                     </p>
                 </div>
                 <Link href="/dashboard/workdays/new">
                     <Button>
                         <Plus className="h-4 w-4 mr-2" />
-                        Assign Workday
+                        {t.workdays.assignWorkday}
                     </Button>
                 </Link>
             </div>
@@ -87,10 +89,10 @@ export default function WorkdaysPage() {
                                         </div>
                                         <span
                                             className={`px-3 py-1 rounded text-sm font-medium ${workday.multiplier === 1.0
-                                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                                                    : workday.multiplier === 1.5
-                                                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-                                                        : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                                : workday.multiplier === 1.5
+                                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                                    : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                                                 }`}
                                         >
                                             {workday.multiplier}x
@@ -105,7 +107,7 @@ export default function WorkdaysPage() {
             {workdays.length === 0 && (
                 <Card className="p-12 text-center">
                     <p className="text-muted-foreground">
-                        No workdays assigned yet. Start by assigning employees to a date.
+                        {t.workdays.noWorkdays}
                     </p>
                 </Card>
             )}

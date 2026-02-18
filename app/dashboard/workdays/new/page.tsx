@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SALARY_MULTIPLIERS } from "@/lib/constants";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Employee {
     id: string;
@@ -18,6 +19,7 @@ interface Employee {
 
 export default function NewWorkdayPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [date, setDate] = useState("");
     const [selectedEmployees, setSelectedEmployees] = useState<Set<string>>(new Set());
@@ -56,8 +58,8 @@ export default function NewWorkdayPage() {
         if (!date || selectedEmployees.size === 0) {
             toast({
                 variant: "destructive",
-                title: "Validation Error",
-                description: "Please select a date and at least one employee",
+                title: t.toasts.validationError,
+                description: t.toasts.selectDateAndEmployee,
             });
             return;
         }
@@ -79,16 +81,16 @@ export default function NewWorkdayPage() {
             await Promise.all(promises);
             toast({
                 variant: "success",
-                title: "Success!",
-                description: "Workdays created successfully",
+                title: t.common.success,
+                description: t.toasts.workdaysCreated,
             });
             router.push("/dashboard/workdays");
         } catch (error) {
             console.error("Failed to create workdays:", error);
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "Some workdays may already exist for this date",
+                title: t.common.error,
+                description: t.toasts.workdaysExist,
             });
         } finally {
             setLoading(false);
@@ -98,20 +100,20 @@ export default function NewWorkdayPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold">Assign Workday</h1>
+                <h1 className="text-3xl font-bold">{t.workdays.assignWorkday}</h1>
                 <p className="text-muted-foreground">
-                    Assign employees to a specific date with salary multipliers
+                    {t.workdays.subtitle}
                 </p>
             </div>
 
             <form onSubmit={handleSubmit}>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Select Date</CardTitle>
+                        <CardTitle>{t.workdays.selectDate}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div>
-                            <Label htmlFor="date">Work Date</Label>
+                            <Label htmlFor="date">{t.workdays.workDate}</Label>
                             <Input
                                 id="date"
                                 type="date"
@@ -125,7 +127,7 @@ export default function NewWorkdayPage() {
 
                 <Card className="mt-6">
                     <CardHeader>
-                        <CardTitle>Select Employees ({selectedEmployees.size})</CardTitle>
+                        <CardTitle>{t.workdays.selectEmployees} ({selectedEmployees.size})</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -171,14 +173,14 @@ export default function NewWorkdayPage() {
 
                 <div className="flex gap-4 mt-6">
                     <Button type="submit" disabled={loading}>
-                        {loading ? "Creating..." : "Assign Workdays"}
+                        {loading ? t.workdays.assigning : t.workdays.assignWorkdays}
                     </Button>
                     <Button
                         type="button"
                         variant="outline"
                         onClick={() => router.back()}
                     >
-                        Cancel
+                        {t.common.cancel}
                     </Button>
                 </div>
             </form>

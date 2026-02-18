@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Plus, Search } from "lucide-react";
 import { formatCurrency, formatShortDate } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Employee {
     id: string;
@@ -21,6 +22,7 @@ interface Employee {
 }
 
 export default function EmployeesPage() {
+    const { t } = useLanguage();
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -49,21 +51,21 @@ export default function EmployeesPage() {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div>{t.common.loading}</div>;
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">Employees</h1>
+                    <h1 className="text-3xl font-bold">{t.employees.title}</h1>
                     <p className="text-muted-foreground">
-                        Manage your workforce ({total} total)
+                        {t.employees.subtitle} ({total} total)
                     </p>
                 </div>
                 <Link href="/dashboard/employees/new">
                     <Button>
                         <Plus className="h-4 w-4 mr-2" />
-                        Add Employee
+                        {t.employees.addEmployee}
                     </Button>
                 </Link>
             </div>
@@ -72,7 +74,7 @@ export default function EmployeesPage() {
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
-                        placeholder="Search by name, CIN, or ID..."
+                        placeholder={t.employees.searchPlaceholder}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="pl-9"
@@ -95,8 +97,8 @@ export default function EmployeesPage() {
                                         </span>
                                         <span
                                             className={`text-xs px-2 py-1 rounded ${employee.employmentStatus === "ACTIVE"
-                                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                                    : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
+                                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
                                                 }`}
                                         >
                                             {employee.employmentStatus}
@@ -110,7 +112,7 @@ export default function EmployeesPage() {
                                     </div>
                                 </div>
                                 <Button variant="outline" size="sm">
-                                    View Details
+                                    {t.common.viewDetails}
                                 </Button>
                             </div>
                         </Link>

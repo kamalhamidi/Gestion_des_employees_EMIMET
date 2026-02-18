@@ -3,7 +3,9 @@
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
 import { LogOut, Hammer } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface HeaderProps {
     userName?: string;
@@ -11,6 +13,8 @@ interface HeaderProps {
 }
 
 export function Header({ userName, userRole }: HeaderProps) {
+    const { t } = useLanguage();
+
     return (
         <header className="border-b">
             <div className="flex h-16 items-center px-6 gap-4">
@@ -23,11 +27,13 @@ export function Header({ userName, userRole }: HeaderProps) {
                         <p className="font-medium">{userName}</p>
                         <p className="text-xs text-muted-foreground">{userRole}</p>
                     </div>
+                    <LanguageToggle />
                     <ModeToggle />
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => signOut({ callbackUrl: "/login" })}
+                        title={t.header.signOut}
                     >
                         <LogOut className="h-5 w-5" />
                     </Button>

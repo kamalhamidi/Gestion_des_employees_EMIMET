@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Sector {
     id: string;
@@ -20,6 +21,7 @@ interface Function {
 
 export default function NewEmployeePage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [sectors, setSectors] = useState<Sector[]>([]);
     const [functions, setFunctions] = useState<Function[]>([]);
     const [loading, setLoading] = useState(false);
@@ -85,15 +87,15 @@ export default function NewEmployeePage() {
                 const data = await response.json();
                 toast({
                     variant: "destructive",
-                    title: "Error",
+                    title: t.common.error,
                     description: data.error || "Failed to create employee",
                 });
             }
         } catch (error) {
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "An error occurred. Please try again.",
+                title: t.common.error,
+                description: t.toasts.anErrorOccurred,
             });
         } finally {
             setLoading(false);
@@ -114,21 +116,21 @@ export default function NewEmployeePage() {
     return (
         <div className="space-y-6 max-w-4xl">
             <div>
-                <h1 className="text-3xl font-bold">Add New Employee</h1>
+                <h1 className="text-3xl font-bold">{t.employees.addNewEmployee}</h1>
                 <p className="text-muted-foreground">
-                    Fill in the employee information below
+                    {t.employees.fillInfo}
                 </p>
             </div>
 
             <form onSubmit={handleSubmit}>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Personal Information</CardTitle>
+                        <CardTitle>{t.employees.personalInfo}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="cin">CIN *</Label>
+                                <Label htmlFor="cin">{t.employees.cin} *</Label>
                                 <Input
                                     id="cin"
                                     name="cin"
@@ -139,7 +141,7 @@ export default function NewEmployeePage() {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="phoneNumber">Phone Number *</Label>
+                                <Label htmlFor="phoneNumber">{t.employees.phoneNumber} *</Label>
                                 <Input
                                     id="phoneNumber"
                                     name="phoneNumber"
@@ -153,7 +155,7 @@ export default function NewEmployeePage() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="firstName">First Name *</Label>
+                                <Label htmlFor="firstName">{t.employees.firstName} *</Label>
                                 <Input
                                     id="firstName"
                                     name="firstName"
@@ -164,7 +166,7 @@ export default function NewEmployeePage() {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="lastName">Last Name *</Label>
+                                <Label htmlFor="lastName">{t.employees.lastName} *</Label>
                                 <Input
                                     id="lastName"
                                     name="lastName"
@@ -177,7 +179,7 @@ export default function NewEmployeePage() {
                         </div>
 
                         <div>
-                            <Label htmlFor="dateOfBirth">Date of Birth *</Label>
+                            <Label htmlFor="dateOfBirth">{t.employees.dateOfBirth} *</Label>
                             <Input
                                 id="dateOfBirth"
                                 name="dateOfBirth"
@@ -189,7 +191,7 @@ export default function NewEmployeePage() {
                         </div>
 
                         <div>
-                            <Label htmlFor="address">Address *</Label>
+                            <Label htmlFor="address">{t.employees.address} *</Label>
                             <Input
                                 id="address"
                                 name="address"
@@ -204,12 +206,12 @@ export default function NewEmployeePage() {
 
                 <Card className="mt-6">
                     <CardHeader>
-                        <CardTitle>Employment Details</CardTitle>
+                        <CardTitle>{t.employees.employmentDetails}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="sectorId">Sector *</Label>
+                                <Label htmlFor="sectorId">{t.employees.sector} *</Label>
                                 <select
                                     id="sectorId"
                                     name="sectorId"
@@ -218,7 +220,7 @@ export default function NewEmployeePage() {
                                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     required
                                 >
-                                    <option value="">Select a sector...</option>
+                                    <option value="">{t.employees.selectSector}</option>
                                     {sectors.map((sector) => (
                                         <option key={sector.id} value={sector.id}>
                                             {sector.name}
@@ -227,7 +229,7 @@ export default function NewEmployeePage() {
                                 </select>
                             </div>
                             <div>
-                                <Label htmlFor="functionId">Function *</Label>
+                                <Label htmlFor="functionId">{t.employees.function} *</Label>
                                 <select
                                     id="functionId"
                                     name="functionId"
@@ -236,7 +238,7 @@ export default function NewEmployeePage() {
                                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     required
                                 >
-                                    <option value="">Select a function...</option>
+                                    <option value="">{t.employees.selectFunction}</option>
                                     {functions.map((func) => (
                                         <option key={func.id} value={func.id}>
                                             {func.name}
@@ -248,7 +250,7 @@ export default function NewEmployeePage() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="dailySalary">Daily Salary (MAD) *</Label>
+                                <Label htmlFor="dailySalary">{t.employees.dailySalary} *</Label>
                                 <Input
                                     id="dailySalary"
                                     name="dailySalary"
@@ -261,7 +263,7 @@ export default function NewEmployeePage() {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="advanceAmount">Advance Amount (MAD)</Label>
+                                <Label htmlFor="advanceAmount">{t.employees.advanceAmount}</Label>
                                 <Input
                                     id="advanceAmount"
                                     name="advanceAmount"
@@ -276,7 +278,7 @@ export default function NewEmployeePage() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor="joinDate">Join Date *</Label>
+                                <Label htmlFor="joinDate">{t.employees.joinDate} *</Label>
                                 <Input
                                     id="joinDate"
                                     name="joinDate"
@@ -287,7 +289,7 @@ export default function NewEmployeePage() {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="employmentStatus">Employment Status *</Label>
+                                <Label htmlFor="employmentStatus">{t.employees.employmentStatus} *</Label>
                                 <select
                                     id="employmentStatus"
                                     name="employmentStatus"
@@ -296,14 +298,14 @@ export default function NewEmployeePage() {
                                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                     required
                                 >
-                                    <option value="ACTIVE">Active</option>
-                                    <option value="INACTIVE">Inactive</option>
+                                    <option value="ACTIVE">{t.common.active}</option>
+                                    <option value="INACTIVE">{t.common.inactive}</option>
                                 </select>
                             </div>
                         </div>
 
                         <div>
-                            <Label htmlFor="notes">Notes</Label>
+                            <Label htmlFor="notes">{t.common.notes}</Label>
                             <textarea
                                 id="notes"
                                 name="notes"
@@ -311,7 +313,7 @@ export default function NewEmployeePage() {
                                 onChange={handleChange}
                                 rows={3}
                                 className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                placeholder="Additional notes about the employee..."
+                                placeholder={t.employees.additionalNotes}
                             />
                         </div>
                     </CardContent>
@@ -319,7 +321,7 @@ export default function NewEmployeePage() {
 
                 <div className="flex gap-4 mt-6">
                     <Button type="submit" disabled={loading}>
-                        {loading ? "Creating..." : "Create Employee"}
+                        {loading ? t.employees.creating : t.employees.createEmployee}
                     </Button>
                     <Button
                         type="button"
@@ -327,7 +329,7 @@ export default function NewEmployeePage() {
                         onClick={() => router.back()}
                         disabled={loading}
                     >
-                        Cancel
+                        {t.common.cancel}
                     </Button>
                 </div>
             </form>

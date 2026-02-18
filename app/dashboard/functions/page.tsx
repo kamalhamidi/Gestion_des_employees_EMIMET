@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Function {
     id: string;
@@ -14,6 +15,7 @@ interface Function {
 }
 
 export default function FunctionsPage() {
+    const { t } = useLanguage();
     const [functions, setFunctions] = useState<Function[]>([]);
     const [loading, setLoading] = useState(true);
     const [editId, setEditId] = useState<string | null>(null);
@@ -56,7 +58,7 @@ export default function FunctionsPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this function?")) return;
+        if (!confirm(t.common.confirm + "?")) return;
 
         try {
             await fetch(`/api/functions/${id}`, { method: "DELETE" });
@@ -66,23 +68,23 @@ export default function FunctionsPage() {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div>{t.common.loading}</div>;
 
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold">Functions</h1>
-                <p className="text-muted-foreground">Manage job functions</p>
+                <h1 className="text-3xl font-bold">{t.functions.title}</h1>
+                <p className="text-muted-foreground">{t.functions.subtitle}</p>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>{editId ? "Edit" : "Add"} Function</CardTitle>
+                    <CardTitle>{editId ? t.common.edit : t.common.add} {t.functions.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="flex gap-4">
                         <div className="flex-1">
-                            <Label htmlFor="name">Function Name</Label>
+                            <Label htmlFor="name">{t.functions.functionName}</Label>
                             <Input
                                 id="name"
                                 value={formData.name}
@@ -94,7 +96,7 @@ export default function FunctionsPage() {
                         <div className="flex items-end gap-2">
                             <Button type="submit">
                                 <Plus className="h-4 w-4 mr-2" />
-                                {editId ? "Update" : "Add"}
+                                {editId ? t.common.save : t.common.add}
                             </Button>
                             {editId && (
                                 <Button
@@ -105,7 +107,7 @@ export default function FunctionsPage() {
                                         setFormData({ name: "" });
                                     }}
                                 >
-                                    Cancel
+                                    {t.common.cancel}
                                 </Button>
                             )}
                         </div>
@@ -121,7 +123,7 @@ export default function FunctionsPage() {
                                 <div>
                                     <h3 className="font-semibold text-lg">{func.name}</h3>
                                     <p className="text-sm text-muted-foreground">
-                                        {func._count.employees} employee(s)
+                                        {func._count.employees} {t.functions.employees}
                                     </p>
                                 </div>
                                 <div className="flex gap-2">

@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function ReportsPage() {
+    const { t } = useLanguage();
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [loading, setLoading] = useState(false);
@@ -18,8 +20,8 @@ export default function ReportsPage() {
         if (!startDate || !endDate) {
             toast({
                 variant: "destructive",
-                title: "Validation Error",
-                description: "Please select both start and end dates",
+                title: t.toasts.validationError,
+                description: t.toasts.selectDates,
             });
             return;
         }
@@ -39,8 +41,8 @@ export default function ReportsPage() {
             console.error("Failed to export report:", error);
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "Failed to generate report",
+                title: t.common.error,
+                description: t.toasts.failedReport,
             });
         } finally {
             setLoading(false);
@@ -50,20 +52,20 @@ export default function ReportsPage() {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold">Salary Reports</h1>
+                <h1 className="text-3xl font-bold">{t.reports.title}</h1>
                 <p className="text-muted-foreground">
-                    Generate and download salary reports for any date range
+                    {t.reports.subtitle}
                 </p>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Export Salary Report (CSV)</CardTitle>
+                    <CardTitle>{t.reports.exportCSV}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label htmlFor="startDate">Start Date</Label>
+                            <Label htmlFor="startDate">{t.reports.startDate}</Label>
                             <Input
                                 id="startDate"
                                 type="date"
@@ -72,7 +74,7 @@ export default function ReportsPage() {
                             />
                         </div>
                         <div>
-                            <Label htmlFor="endDate">End Date</Label>
+                            <Label htmlFor="endDate">{t.reports.endDate}</Label>
                             <Input
                                 id="endDate"
                                 type="date"
@@ -82,26 +84,26 @@ export default function ReportsPage() {
                         </div>
                     </div>
                     <Button onClick={handleExport} disabled={loading}>
-                        {loading ? "Generating..." : "Download CSV Report"}
+                        {loading ? t.reports.generating : t.reports.downloadCSV}
                     </Button>
                 </CardContent>
             </Card>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Report Information</CardTitle>
+                    <CardTitle>{t.reports.reportInfo}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2 text-sm text-muted-foreground">
-                        <p>The CSV report includes the following data for each employee:</p>
+                        <p>{t.reports.reportIncludes}</p>
                         <ul className="list-disc list-inside space-y-1 ml-4">
-                            <li>Employee Name</li>
-                            <li>Number of Worked Days</li>
-                            <li>List of Worked Dates</li>
-                            <li>Daily Salary Rate</li>
-                            <li>Gross Salary (with multipliers applied)</li>
-                            <li>Advance Amount</li>
-                            <li>Net Salary (Gross - Advance)</li>
+                            <li>{t.reports.employeeName}</li>
+                            <li>{t.reports.workedDays}</li>
+                            <li>{t.reports.workedDates}</li>
+                            <li>{t.reports.dailySalaryRate}</li>
+                            <li>{t.reports.grossSalary}</li>
+                            <li>{t.reports.advanceAmount}</li>
+                            <li>{t.reports.netSalary}</li>
                         </ul>
                     </div>
                 </CardContent>

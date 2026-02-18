@@ -12,28 +12,30 @@ import {
     FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface SidebarProps {
     userRole?: string;
 }
 
-const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Employees", href: "/dashboard/employees", icon: Users },
-    { name: "Workdays", href: "/dashboard/workdays", icon: Calendar },
-    { name: "Sectors", href: "/dashboard/sectors", icon: Building2 },
-    { name: "Functions", href: "/dashboard/functions", icon: Briefcase },
-    { name: "Reports", href: "/dashboard/reports", icon: FileText },
-    {
-        name: "Users",
-        href: "/dashboard/users",
-        icon: UserCircle,
-        adminOnly: true,
-    },
-];
-
 export function Sidebar({ userRole }: SidebarProps) {
     const pathname = usePathname();
+    const { t } = useLanguage();
+
+    const navigation = [
+        { name: t.nav.dashboard, href: "/dashboard", icon: LayoutDashboard },
+        { name: t.nav.employees, href: "/dashboard/employees", icon: Users },
+        { name: t.nav.workdays, href: "/dashboard/workdays", icon: Calendar },
+        { name: t.nav.sectors, href: "/dashboard/sectors", icon: Building2 },
+        { name: t.nav.functions, href: "/dashboard/functions", icon: Briefcase },
+        { name: t.nav.reports, href: "/dashboard/reports", icon: FileText },
+        {
+            name: t.nav.users,
+            href: "/dashboard/users",
+            icon: UserCircle,
+            adminOnly: true,
+        },
+    ];
 
     const filteredNav = navigation.filter(
         (item) => !item.adminOnly || userRole === "ADMIN"
@@ -47,7 +49,7 @@ export function Sidebar({ userRole }: SidebarProps) {
 
                 return (
                     <Link
-                        key={item.name}
+                        key={item.href}
                         href={item.href}
                         className={cn(
                             "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",

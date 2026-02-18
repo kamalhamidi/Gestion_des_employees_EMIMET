@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Plus, Shield, User } from "lucide-react";
 import { formatShortDate } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface User {
     id: string;
@@ -18,6 +19,7 @@ interface User {
 }
 
 export default function UsersPage() {
+    const { t } = useLanguage();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
@@ -44,7 +46,7 @@ export default function UsersPage() {
                 console.error("Error fetching users:", errorData);
                 toast({
                     variant: "destructive",
-                    title: "Failed to fetch users",
+                    title: t.toasts.failedFetchUsers,
                     description: errorData.error || "Unknown error",
                 });
             }
@@ -52,8 +54,8 @@ export default function UsersPage() {
             console.error("Failed to fetch users:", error);
             toast({
                 variant: "destructive",
-                title: "Network error",
-                description: "Failed to connect to the server",
+                title: t.toasts.networkError,
+                description: t.toasts.failedConnect,
             });
         } finally {
             setLoading(false);
@@ -78,14 +80,14 @@ export default function UsersPage() {
                 setShowForm(false);
                 toast({
                     variant: "success",
-                    title: "Success!",
-                    description: "User created successfully",
+                    title: t.common.success,
+                    description: t.toasts.userCreated,
                 });
             } else {
                 const data = await response.json();
                 toast({
                     variant: "destructive",
-                    title: "Error",
+                    title: t.common.error,
                     description: data.error || "Failed to create user",
                 });
             }
@@ -93,8 +95,8 @@ export default function UsersPage() {
             console.error("Failed to create user:", error);
             toast({
                 variant: "destructive",
-                title: "Error",
-                description: "An error occurred. Please try again.",
+                title: t.common.error,
+                description: t.toasts.anErrorOccurred,
             });
         } finally {
             setSubmitting(false);
@@ -111,34 +113,34 @@ export default function UsersPage() {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>{t.common.loading}</div>;
     }
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold">User Management</h1>
+                    <h1 className="text-3xl font-bold">{t.users.title}</h1>
                     <p className="text-muted-foreground">
-                        Manage system users and their roles
+                        {t.users.subtitle}
                     </p>
                 </div>
                 <Button onClick={() => setShowForm(!showForm)}>
                     <Plus className="h-4 w-4 mr-2" />
-                    {showForm ? "Cancel" : "Add User"}
+                    {showForm ? t.common.cancel : t.users.addUser}
                 </Button>
             </div>
 
             {showForm && (
                 <Card>
                     <CardHeader>
-                        <CardTitle>Create New User</CardTitle>
+                        <CardTitle>{t.users.createUser}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <Label htmlFor="name">Full Name *</Label>
+                                    <Label htmlFor="name">{t.users.fullName} *</Label>
                                     <Input
                                         id="name"
                                         value={formData.name}
@@ -150,7 +152,7 @@ export default function UsersPage() {
                                     />
                                 </div>
                                 <div>
-                                    <Label htmlFor="email">Email *</Label>
+                                    <Label htmlFor="email">{t.common.email} *</Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -165,7 +167,7 @@ export default function UsersPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <Label htmlFor="password">Password *</Label>
+                                    <Label htmlFor="password">{t.users.password} *</Label>
                                     <Input
                                         id="password"
                                         type="password"
@@ -173,13 +175,13 @@ export default function UsersPage() {
                                         onChange={(e) =>
                                             setFormData({ ...formData, password: e.target.value })
                                         }
-                                        placeholder="Minimum 6 characters"
+                                        placeholder={t.users.passwordPlaceholder}
                                         required
                                         minLength={6}
                                     />
                                 </div>
                                 <div>
-                                    <Label htmlFor="role">Role *</Label>
+                                    <Label htmlFor="role">{t.common.role} *</Label>
                                     <select
                                         id="role"
                                         value={formData.role}
@@ -197,7 +199,7 @@ export default function UsersPage() {
                             </div>
                             <div className="flex gap-2">
                                 <Button type="submit" disabled={submitting}>
-                                    {submitting ? "Creating..." : "Create User"}
+                                    {submitting ? t.users.creating : t.users.createUser}
                                 </Button>
                                 <Button
                                     type="button"
@@ -205,7 +207,7 @@ export default function UsersPage() {
                                     onClick={() => setShowForm(false)}
                                     disabled={submitting}
                                 >
-                                    Cancel
+                                    {t.common.cancel}
                                 </Button>
                             </div>
                         </form>
@@ -217,7 +219,7 @@ export default function UsersPage() {
                 {users.length === 0 ? (
                     <Card>
                         <CardContent className="text-center py-8 text-muted-foreground">
-                            No users found
+                            {t.users.noUsers}
                         </CardContent>
                     </Card>
                 ) : (
@@ -241,7 +243,7 @@ export default function UsersPage() {
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <div className="text-right">
-                                        <p className="text-sm text-muted-foreground">Created</p>
+                                        <p className="text-sm text-muted-foreground">{t.common.created}</p>
                                         <p className="text-sm font-medium">
                                             {formatShortDate(user.createdAt)}
                                         </p>
