@@ -114,13 +114,24 @@ export default function NewWorkdayPage() {
                     <CardContent>
                         <div>
                             <Label htmlFor="date">{t.workdays.workDate}</Label>
-                            <Input
-                                id="date"
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                required
-                            />
+                            <div className="flex gap-2 mt-1">
+                                <Input
+                                    id="date"
+                                    type="date"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    required
+                                    className="flex-1"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setDate(new Date().toISOString().split("T")[0])}
+                                    className="shrink-0 font-medium"
+                                >
+                                    📅 {t.workdays.today}
+                                </Button>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>

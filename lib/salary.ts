@@ -99,6 +99,48 @@ export async function calculateAllSalaries(
     });
 }
 
+export async function calculateDetailedSalaries(
+    startDate: Date,
+    endDate: Date
+) {
+    const employees = await db.employee.findMany({
+        where: { isDeleted: false },
+        include: {
+            workdays: {
+                where: {
+                    date: {
+                        gte: startDate,
+                        lte: endDate,
+                    },
+                },
+                orderBy: { date: "asc" },
+            },
+        },
+        orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
+    });
+
+    return employees.map((employee) => {
+        const workedDaysMap: Record<string, number> = {};
+        employee.workdays.forEach((wd) => {
+            const dateKey = new Date(wd.date).toISOString().split("T")[0];
+            workedDaysMap[dateKey] = wd.multiplier;
+        });
+
+        const grossSalary = employee.workdays.reduce((total, workday) => {
+            return total + employee.dailySalary * workday.multiplier;
+        }, 0);
+
+        return {
+            employeeId: employee.id,
+            employeeName: `${employee.firstName} ${employee.lastName}`,
+            dailySalary: employee.dailySalary,
+            workedDaysMap,
+            workedDays: employee.workdays.length,
+            grossSalary,
+        };
+    });
+}
+
 export async function getMonthlyStats(date: Date = new Date()) {
     const startDate = startOfMonth(date);
     const endDate = endOfMonth(date);

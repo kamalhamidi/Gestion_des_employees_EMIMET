@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { calculateAllSalaries } from "@/lib/salary";
-import { generateCSV } from "@/lib/csv";
+import { calculateDetailedSalaries } from "@/lib/salary";
+import { generateDetailedCSV } from "@/lib/csv";
 import { auth } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
@@ -21,17 +21,20 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        const salaries = await calculateAllSalaries(
+        const salaries = await calculateDetailedSalaries(
             new Date(startDate),
             new Date(endDate)
         );
 
-        const csv = generateCSV(salaries);
+        const csv = generateDetailedCSV(salaries, startDate, endDate);
 
-        return new NextResponse(csv, {
+        // Add UTF-8 BOM for proper Excel display of French characters
+        const BOM = "\uFEFF";
+
+        return new NextResponse(BOM + csv, {
             headers: {
-                "Content-Type": "text/csv",
-                "Content-Disposition": `attachment; filename="salary-report-${startDate}-${endDate}.csv"`,
+                "Content-Type": "text/csv;charset=utf-8",
+                "Content-Disposition": `attachment; filename="rapport-salaire-${startDate}-${endDate}.csv"`,
             },
         });
     } catch (error) {

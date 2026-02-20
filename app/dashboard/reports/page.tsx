@@ -95,15 +95,14 @@ export default function ReportsPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2 text-sm text-muted-foreground">
-                        <p>{t.reports.reportIncludes}</p>
+                        <p>{t.reports.reportIncludesDetailed}</p>
                         <ul className="list-disc list-inside space-y-1 ml-4">
-                            <li>{t.reports.employeeName}</li>
-                            <li>{t.reports.workedDays}</li>
-                            <li>{t.reports.workedDates}</li>
-                            <li>{t.reports.dailySalaryRate}</li>
-                            <li>{t.reports.grossSalary}</li>
-                            <li>{t.reports.advanceAmount}</li>
-                            <li>{t.reports.netSalary}</li>
+                            <li>{t.reports.detailedEmployeeName}</li>
+                            <li>{t.reports.detailedDayColumns}</li>
+                            <li>{t.reports.detailedWorkedDays}</li>
+                            <li>{t.reports.detailedGrossSalary}</li>
+                            <li>{t.reports.detailedTotals}</li>
+                            <li>{t.reports.detailedSummary}</li>
                         </ul>
                     </div>
                 </CardContent>

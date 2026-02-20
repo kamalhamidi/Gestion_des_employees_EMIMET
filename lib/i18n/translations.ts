@@ -130,6 +130,7 @@ export const translations = {
             noWorkdays: "No workdays recorded",
             employee: "Employee",
             multiplier: "Multiplier",
+            today: "Today",
         },
         // Reports
         reports: {
@@ -149,6 +150,13 @@ export const translations = {
             grossSalary: "Gross Salary (with multipliers applied)",
             advanceAmount: "Advance Amount",
             netSalary: "Net Salary (Gross - Advance)",
+            reportIncludesDetailed: "The CSV report is a detailed attendance matrix with:",
+            detailedEmployeeName: "Employee name (rows)",
+            detailedDayColumns: "One column per day in the selected range (with ✓ if present)",
+            detailedWorkedDays: "Total worked days per employee",
+            detailedGrossSalary: "Gross salary per employee",
+            detailedTotals: "Totals row showing daily attendance count",
+            detailedSummary: "Summary section with averages and totals",
         },
         // Users
         users: {
@@ -344,6 +352,7 @@ export const translations = {
             noWorkdays: "Aucun jour de travail enregistré",
             employee: "Employé",
             multiplier: "Multiplicateur",
+            today: "Aujourd'hui",
         },
         // Reports
         reports: {
@@ -363,6 +372,13 @@ export const translations = {
             grossSalary: "Salaire brut (avec multiplicateurs)",
             advanceAmount: "Montant de l'avance",
             netSalary: "Salaire net (Brut - Avance)",
+            reportIncludesDetailed: "Le rapport CSV est une matrice de présence détaillée avec :",
+            detailedEmployeeName: "Nom de l'employé (lignes)",
+            detailedDayColumns: "Une colonne par jour dans la période sélectionnée (✓ si présent)",
+            detailedWorkedDays: "Total des jours travaillés par employé",
+            detailedGrossSalary: "Salaire brut par employé",
+            detailedTotals: "Ligne de totaux avec le nombre de présences par jour",
+            detailedSummary: "Section résumé avec moyennes et totaux",
         },
         // Users
         users: {
@@ -552,6 +568,7 @@ export const translations = {
             noWorkdays: "لا توجد أيام عمل مسجلة",
             employee: "الموظف",
             multiplier: "المعامل",
+            today: "اليوم",
         },
         reports: {
             title: "تقارير الرواتب",
@@ -570,6 +587,13 @@ export const translations = {
             grossSalary: "الراتب الإجمالي (مع المعاملات)",
             advanceAmount: "مبلغ السلفة",
             netSalary: "صافي الراتب (الإجمالي - السلفة)",
+            reportIncludesDetailed: "تقرير CSV هو مصفوفة حضور مفصلة تحتوي على:",
+            detailedEmployeeName: "اسم الموظف (صفوف)",
+            detailedDayColumns: "عمود لكل يوم في الفترة المحددة (✓ إذا كان حاضراً)",
+            detailedWorkedDays: "إجمالي أيام العمل لكل موظف",
+            detailedGrossSalary: "الراتب الإجمالي لكل موظف",
+            detailedTotals: "صف المجاميع يوضح عدد الحاضرين يومياً",
+            detailedSummary: "قسم الملخص مع المتوسطات والمجاميع",
         },
         users: {
             title: "إدارة المستخدمين",
