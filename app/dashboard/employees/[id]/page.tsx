@@ -73,6 +73,12 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
                     </div>
                 </div>
                 <div className="flex gap-2">
+                    <a href={`/api/employees/${employee.id}/pdf`} target="_blank">
+                        <Button variant="outline">
+                            <Download className="h-4 w-4 mr-2" />
+                            PDF
+                        </Button>
+                    </a>
                     <Link href={`/dashboard/employees/${employee.id}/edit`}>
                         <Button variant="outline">
                             <Pencil className="h-4 w-4 mr-2" />
