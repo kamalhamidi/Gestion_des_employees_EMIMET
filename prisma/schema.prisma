@@ -58,7 +58,7 @@ model Employee {
   phoneNumber      String
   address          String
   profilePhoto     String?
-  idProofPhoto     String?
+  idProofPhotos    String[]
   sectorId         String
   sector           Sector           @relation(fields: [sectorId], references: [id])
   functionId       String

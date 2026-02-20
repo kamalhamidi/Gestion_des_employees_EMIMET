@@ -34,8 +34,8 @@ export const employeeSchema = z.object({
     joinDate: z.string().or(z.date()),
     employmentStatus: z.enum(["ACTIVE", "INACTIVE"]).default("ACTIVE"),
     notes: z.string().optional(),
-    profilePhoto: z.string().optional(),
-    idProofPhoto: z.string().optional(),
+    profilePhoto: z.string().nullable().optional(),
+    idProofPhotos: z.array(z.string()).optional().default([]),
 });
 
 export const workdaySchema = z.object({

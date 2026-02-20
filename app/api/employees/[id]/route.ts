@@ -67,6 +67,12 @@ export async function PUT(
             if (json.notes !== undefined) {
                 updateData.notes = json.notes;
             }
+            if (json.profilePhoto !== undefined) {
+                updateData.profilePhoto = json.profilePhoto;
+            }
+            if (json.idProofPhotos !== undefined) {
+                updateData.idProofPhotos = json.idProofPhotos;
+            }
         } else {
             // For full updates, validate with schema
             const validated = employeeSchema.parse(json);

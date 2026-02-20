@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatShortDate } from "@/lib/utils";
 import Link from "next/link";
-import { Pencil, ArrowLeft } from "lucide-react";
+import { Pencil, ArrowLeft, FileText, Download } from "lucide-react";
 import { AddAdvanceForm } from "@/components/employees/advance-input";
 import { AdvanceHistory } from "@/components/employees/advance-history";
 
@@ -38,6 +38,8 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
     }, 0);
     const netSalary = totalGrossSalary - employee.advanceAmount;
 
+    const isImage = (path: string) => /\.(jpg|jpeg|png|webp)$/i.test(path);
+
     return (
         <div className="space-y-6 max-w-6xl">
             <div className="flex items-center justify-between">
@@ -47,11 +49,27 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
                             <ArrowLeft className="h-5 w-5" />
                         </Button>
                     </Link>
-                    <div>
-                        <h1 className="text-3xl font-bold">
-                            {employee.firstName} {employee.lastName}
-                        </h1>
-                        <p className="text-muted-foreground">{employee.employeeId}</p>
+                    {/* Profile Photo + Name */}
+                    <div className="flex items-center gap-4">
+                        {employee.profilePhoto ? (
+                            <img
+                                src={employee.profilePhoto}
+                                alt={`${employee.firstName} ${employee.lastName}`}
+                                className="w-16 h-16 rounded-full object-cover border-2 border-border"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center border-2 border-border">
+                                <span className="text-xl font-bold text-primary">
+                                    {employee.firstName[0]}{employee.lastName[0]}
+                                </span>
+                            </div>
+                        )}
+                        <div>
+                            <h1 className="text-3xl font-bold">
+                                {employee.firstName} {employee.lastName}
+                            </h1>
+                            <p className="text-muted-foreground">{employee.employeeId}</p>
+                        </div>
                     </div>
                 </div>
                 <div className="flex gap-2">
@@ -138,6 +156,43 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Identity Proof Documents */}
+            {employee.idProofPhotos && employee.idProofPhotos.length > 0 && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Identity Proof Documents</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {employee.idProofPhotos.map((filePath: string, index: number) => (
+                                <div key={index} className="border rounded-lg overflow-hidden">
+                                    {isImage(filePath) ? (
+                                        <a href={filePath} target="_blank" rel="noopener noreferrer">
+                                            <img
+                                                src={filePath}
+                                                alt={`ID Proof ${index + 1}`}
+                                                className="w-full h-40 object-cover hover:opacity-80 transition-opacity cursor-pointer"
+                                            />
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href={filePath}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full h-40 flex flex-col items-center justify-center bg-muted hover:bg-muted/80 transition-colors"
+                                        >
+                                            <FileText className="h-12 w-12 text-muted-foreground" />
+                                            <span className="text-sm text-muted-foreground mt-2">PDF Document</span>
+                                            <Download className="h-4 w-4 text-muted-foreground mt-1" />
+                                        </a>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            )}
 
             <Card>
                 <CardHeader>
